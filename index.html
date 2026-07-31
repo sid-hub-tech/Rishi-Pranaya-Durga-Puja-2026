@@ -852,7 +852,7 @@ function updateEventCountdown() {
   const now  = new Date();
   const diff = EVENT_DATE - now;
   if (diff<=0) { el.textContent="Event is underway! 🪷🪷"; return; }
-  const d = Math.floor(diff/86400000);
+  const d = Math.ceil(diff/86400000);
   el.textContent = d > 0 ? `${d} day${d===1?'':'s'} to go` : "Tomorrow! 🪷🪷";
 }
 setInterval(updateEventCountdown, 60000); // only days shown, update every minute
