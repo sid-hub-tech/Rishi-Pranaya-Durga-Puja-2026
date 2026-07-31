@@ -179,7 +179,8 @@
 
   /* ── LOADING / EMPTY ── */
   .loading { text-align:center; padding:48px 20px; color:var(--ink-3); font-size:13px; }
-  .loading::before { content:"🪷🪷"; display:block; font-size:28px; margin-bottom:10px; animation:pulse 1.4s ease-in-out infinite; }
+  .loading::before { content:""; display:none; }
+  .loading .durga-spin { display:block; margin:0 auto 10px; width:48px; height:48px; animation:pulse 1.4s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
   .err-msg { background:#fff4f4; border:1px solid #fcc; border-radius:var(--radius-sm); padding:16px; color:var(--sindoor); font-size:13px; margin:10px 0; }
   .empty { text-align:center; padding:48px 20px; color:var(--ink-3); font-size:13px; }
@@ -308,7 +309,7 @@
       <div class="card-eyebrow">Event Summary</div>
       <h2>Programme details</h2>
       <div class="day-summary-grid" id="day-summary-grid">
-        <div class="loading"> </div>
+        <div class="loading"><svg class="durga-spin" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="62" rx="28" ry="32" fill="#F5C518"/><ellipse cx="50" cy="62" rx="28" ry="32" fill="none" stroke="#1a1a00" stroke-width="2"/><rect x="22" y="50" width="56" height="14" rx="2" fill="#1a1a00"/><ellipse cx="50" cy="50" rx="28" ry="32" fill="#F5C518"/><ellipse cx="50" cy="50" rx="28" ry="32" fill="none" stroke="#1a1a00" stroke-width="2.2"/><ellipse cx="37" cy="50" rx="7" ry="8" fill="#fff"/><ellipse cx="63" cy="50" rx="7" ry="8" fill="#fff"/><ellipse cx="37" cy="51" rx="4" ry="5" fill="#3a1a00"/><ellipse cx="63" cy="51" rx="4" ry="5" fill="#3a1a00"/><ellipse cx="37" cy="50" rx="2" ry="2.5" fill="#000"/><ellipse cx="63" cy="50" rx="2" ry="2.5" fill="#000"/><path d="M44 60 Q50 65 56 60" stroke="#c0392b" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="38" rx="5" ry="6" fill="#c0392b"/><ellipse cx="50" cy="38" rx="3" ry="4" fill="#8B0000"/><circle cx="50" cy="43" r="2.5" fill="#c0392b"/><path d="M28 35 Q20 20 30 15 Q35 28 28 35Z" fill="#D4860A"/><path d="M72 35 Q80 20 70 15 Q65 28 72 35Z" fill="#D4860A"/><path d="M35 28 Q28 12 40 8 Q42 22 35 28Z" fill="#D4860A"/><path d="M65 28 Q72 12 60 8 Q58 22 65 28Z" fill="#D4860A"/><path d="M50 22 Q46 6 50 2 Q54 6 50 22Z" fill="#D4860A"/><circle cx="50" cy="4" r="3" fill="#c0392b"/><circle cx="30" cy="16" r="2.5" fill="#c0392b"/><circle cx="70" cy="16" r="2.5" fill="#c0392b"/><circle cx="37" cy="10" r="2" fill="#c0392b"/><circle cx="63" cy="10" r="2" fill="#c0392b"/><ellipse cx="28" cy="52" rx="5" ry="8" fill="#F5C518" stroke="#1a1a00" stroke-width="1.5"/><ellipse cx="72" cy="52" rx="5" ry="8" fill="#F5C518" stroke="#1a1a00" stroke-width="1.5"/><circle cx="25" cy="52" r="3" fill="#D4860A" stroke="#1a1a00" stroke-width="1"/><circle cx="75" cy="52" r="3" fill="#D4860A" stroke="#1a1a00" stroke-width="1"/></svg>Loading…</div>
       </div>
     </div>
 
@@ -343,7 +344,7 @@
     <div class="card">
       <div class="card-eyebrow">Segment Breakdown</div>
       <h2>Programme at a Glance</h2>
-      <div id="overview-breakdown"><div class="loading"> </div></div>
+      <div id="overview-breakdown"><div class="loading"><svg class="durga-spin" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="62" rx="28" ry="32" fill="#F5C518"/><ellipse cx="50" cy="62" rx="28" ry="32" fill="none" stroke="#1a1a00" stroke-width="2"/><rect x="22" y="50" width="56" height="14" rx="2" fill="#1a1a00"/><ellipse cx="50" cy="50" rx="28" ry="32" fill="#F5C518"/><ellipse cx="50" cy="50" rx="28" ry="32" fill="none" stroke="#1a1a00" stroke-width="2.2"/><ellipse cx="37" cy="50" rx="7" ry="8" fill="#fff"/><ellipse cx="63" cy="50" rx="7" ry="8" fill="#fff"/><ellipse cx="37" cy="51" rx="4" ry="5" fill="#3a1a00"/><ellipse cx="63" cy="51" rx="4" ry="5" fill="#3a1a00"/><ellipse cx="37" cy="50" rx="2" ry="2.5" fill="#000"/><ellipse cx="63" cy="50" rx="2" ry="2.5" fill="#000"/><path d="M44 60 Q50 65 56 60" stroke="#c0392b" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="38" rx="5" ry="6" fill="#c0392b"/><ellipse cx="50" cy="38" rx="3" ry="4" fill="#8B0000"/><circle cx="50" cy="43" r="2.5" fill="#c0392b"/><path d="M28 35 Q20 20 30 15 Q35 28 28 35Z" fill="#D4860A"/><path d="M72 35 Q80 20 70 15 Q65 28 72 35Z" fill="#D4860A"/><path d="M35 28 Q28 12 40 8 Q42 22 35 28Z" fill="#D4860A"/><path d="M65 28 Q72 12 60 8 Q58 22 65 28Z" fill="#D4860A"/><path d="M50 22 Q46 6 50 2 Q54 6 50 22Z" fill="#D4860A"/><circle cx="50" cy="4" r="3" fill="#c0392b"/><circle cx="30" cy="16" r="2.5" fill="#c0392b"/><circle cx="70" cy="16" r="2.5" fill="#c0392b"/><circle cx="37" cy="10" r="2" fill="#c0392b"/><circle cx="63" cy="10" r="2" fill="#c0392b"/><ellipse cx="28" cy="52" rx="5" ry="8" fill="#F5C518" stroke="#1a1a00" stroke-width="1.5"/><ellipse cx="72" cy="52" rx="5" ry="8" fill="#F5C518" stroke="#1a1a00" stroke-width="1.5"/><circle cx="25" cy="52" r="3" fill="#D4860A" stroke="#1a1a00" stroke-width="1"/><circle cx="75" cy="52" r="3" fill="#D4860A" stroke="#1a1a00" stroke-width="1"/></svg>Loading…</div></div>
     </div>
 
     <!-- QR Code -->
@@ -377,7 +378,7 @@
       <input type="text" id="prog-search" placeholder="Search by name, song or category…" oninput="renderProgramme()" />
     </div>
     <div class="now-playing-tip" id="np-tip">💡 Tap any item during the event to mark it as <strong>Now Playing</strong></div>
-    <div id="programme-container"><div class="loading"> </div></div>
+    <div id="programme-container"><div class="loading"><svg class="durga-spin" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="62" rx="28" ry="32" fill="#F5C518"/><ellipse cx="50" cy="62" rx="28" ry="32" fill="none" stroke="#1a1a00" stroke-width="2"/><rect x="22" y="50" width="56" height="14" rx="2" fill="#1a1a00"/><ellipse cx="50" cy="50" rx="28" ry="32" fill="#F5C518"/><ellipse cx="50" cy="50" rx="28" ry="32" fill="none" stroke="#1a1a00" stroke-width="2.2"/><ellipse cx="37" cy="50" rx="7" ry="8" fill="#fff"/><ellipse cx="63" cy="50" rx="7" ry="8" fill="#fff"/><ellipse cx="37" cy="51" rx="4" ry="5" fill="#3a1a00"/><ellipse cx="63" cy="51" rx="4" ry="5" fill="#3a1a00"/><ellipse cx="37" cy="50" rx="2" ry="2.5" fill="#000"/><ellipse cx="63" cy="50" rx="2" ry="2.5" fill="#000"/><path d="M44 60 Q50 65 56 60" stroke="#c0392b" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="38" rx="5" ry="6" fill="#c0392b"/><ellipse cx="50" cy="38" rx="3" ry="4" fill="#8B0000"/><circle cx="50" cy="43" r="2.5" fill="#c0392b"/><path d="M28 35 Q20 20 30 15 Q35 28 28 35Z" fill="#D4860A"/><path d="M72 35 Q80 20 70 15 Q65 28 72 35Z" fill="#D4860A"/><path d="M35 28 Q28 12 40 8 Q42 22 35 28Z" fill="#D4860A"/><path d="M65 28 Q72 12 60 8 Q58 22 65 28Z" fill="#D4860A"/><path d="M50 22 Q46 6 50 2 Q54 6 50 22Z" fill="#D4860A"/><circle cx="50" cy="4" r="3" fill="#c0392b"/><circle cx="30" cy="16" r="2.5" fill="#c0392b"/><circle cx="70" cy="16" r="2.5" fill="#c0392b"/><circle cx="37" cy="10" r="2" fill="#c0392b"/><circle cx="63" cy="10" r="2" fill="#c0392b"/><ellipse cx="28" cy="52" rx="5" ry="8" fill="#F5C518" stroke="#1a1a00" stroke-width="1.5"/><ellipse cx="72" cy="52" rx="5" ry="8" fill="#F5C518" stroke="#1a1a00" stroke-width="1.5"/><circle cx="25" cy="52" r="3" fill="#D4860A" stroke="#1a1a00" stroke-width="1"/><circle cx="75" cy="52" r="3" fill="#D4860A" stroke="#1a1a00" stroke-width="1"/></svg>Loading…</div></div>
   </section>
 
   <!-- ══ PARTICIPANTS ═══════════════════════════════════════ -->
@@ -385,7 +386,7 @@
     <div class="search-wrap">
       <input type="text" id="part-search" placeholder="Search participant name…" oninput="renderParticipants()" />
     </div>
-    <div id="participants-container"><div class="loading"> </div></div>
+    <div id="participants-container"><div class="loading"><svg class="durga-spin" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="62" rx="28" ry="32" fill="#F5C518"/><ellipse cx="50" cy="62" rx="28" ry="32" fill="none" stroke="#1a1a00" stroke-width="2"/><rect x="22" y="50" width="56" height="14" rx="2" fill="#1a1a00"/><ellipse cx="50" cy="50" rx="28" ry="32" fill="#F5C518"/><ellipse cx="50" cy="50" rx="28" ry="32" fill="none" stroke="#1a1a00" stroke-width="2.2"/><ellipse cx="37" cy="50" rx="7" ry="8" fill="#fff"/><ellipse cx="63" cy="50" rx="7" ry="8" fill="#fff"/><ellipse cx="37" cy="51" rx="4" ry="5" fill="#3a1a00"/><ellipse cx="63" cy="51" rx="4" ry="5" fill="#3a1a00"/><ellipse cx="37" cy="50" rx="2" ry="2.5" fill="#000"/><ellipse cx="63" cy="50" rx="2" ry="2.5" fill="#000"/><path d="M44 60 Q50 65 56 60" stroke="#c0392b" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="38" rx="5" ry="6" fill="#c0392b"/><ellipse cx="50" cy="38" rx="3" ry="4" fill="#8B0000"/><circle cx="50" cy="43" r="2.5" fill="#c0392b"/><path d="M28 35 Q20 20 30 15 Q35 28 28 35Z" fill="#D4860A"/><path d="M72 35 Q80 20 70 15 Q65 28 72 35Z" fill="#D4860A"/><path d="M35 28 Q28 12 40 8 Q42 22 35 28Z" fill="#D4860A"/><path d="M65 28 Q72 12 60 8 Q58 22 65 28Z" fill="#D4860A"/><path d="M50 22 Q46 6 50 2 Q54 6 50 22Z" fill="#D4860A"/><circle cx="50" cy="4" r="3" fill="#c0392b"/><circle cx="30" cy="16" r="2.5" fill="#c0392b"/><circle cx="70" cy="16" r="2.5" fill="#c0392b"/><circle cx="37" cy="10" r="2" fill="#c0392b"/><circle cx="63" cy="10" r="2" fill="#c0392b"/><ellipse cx="28" cy="52" rx="5" ry="8" fill="#F5C518" stroke="#1a1a00" stroke-width="1.5"/><ellipse cx="72" cy="52" rx="5" ry="8" fill="#F5C518" stroke="#1a1a00" stroke-width="1.5"/><circle cx="25" cy="52" r="3" fill="#D4860A" stroke="#1a1a00" stroke-width="1"/><circle cx="75" cy="52" r="3" fill="#D4860A" stroke="#1a1a00" stroke-width="1"/></svg>Loading…</div></div>
   </section>
 
   <!-- ══ MEMORIES 2025 ══════════════════════════════════════ -->
@@ -851,9 +852,9 @@ function updateEventCountdown() {
   if (!el) return;
   const now  = new Date();
   const diff = EVENT_DATE - now;
-  if (diff<=0) { el.textContent="Event is underway! 🪷🪷"; return; }
+  if (diff<=0) { el.textContent="Event is underway! 🙏"; return; }
   const d = Math.ceil(diff/86400000);
-  el.textContent = d > 0 ? `${d} day${d===1?'':'s'} to go` : "Tomorrow! 🪷🪷";
+  el.textContent = d > 0 ? `${d} day${d===1?'':'s'} to go` : "Tomorrow! 🙏";
 }
 setInterval(updateEventCountdown, 60000); // only days shown, update every minute
 updateEventCountdown();
@@ -862,7 +863,7 @@ updateEventCountdown();
    WHATSAPP SHARE
 ═══════════════════════════════════════════════════════════ */
 function shareWhatsApp() {
-  const msg = encodeURIComponent("🪷🪷 *Rishi Pranaya Durga Puja 2026 — Cultural Programme*\n\nView the live programme register here:\n" + PAGE_URL + "\n\nShubho Sharodiya! 🙏");
+  const msg = encodeURIComponent("🪷 *Rishi Pranaya Durga Puja 2026 — Cultural Programme*\n\nView the live programme register here:\n" + PAGE_URL + "\n\nShubho Durga Puja! 🙏");
   window.open("https://wa.me/?text="+msg,"_blank");
 }
 
