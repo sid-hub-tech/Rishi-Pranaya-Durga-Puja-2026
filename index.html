@@ -136,7 +136,7 @@
   .prog-badge { display:inline-flex; align-items:center; font-size:10px; font-weight:600; letter-spacing:.02em; padding:2px 8px; border-radius:4px; }
   .badge-dance  { background:#FEF0E6; color:#B54708; border:1px solid #FDDCAB; }
   .badge-song   { background:#FEE8E8; color:var(--sindoor); border:1px solid #FCCFCF; }
-  .badge-Dance-Drama  { background:#EEE8FF; color:#5B21B6; border:1px solid #D8CFFF; }
+  .badge-drama  { background:#EEE8FF; color:#5B21B6; border:1px solid #D8CFFF; }
   .badge-band   { background:#E8F1FF; color:#1D4ED8; border:1px solid #BFCFFF; }
   .badge-recit  { background:#FEF9C3; color:#854D0E; border:1px solid #FDE68A; }
   .badge-other  { background:#F3EDE4; color:var(--ink-3); border:1px solid var(--border); }
@@ -324,7 +324,7 @@
       <div id="about-en" class="about-panel">
         <h3 class="about-heading">Welcome to Rishi Pranaya 2nd Durga Puja Cultural Program 2026</h3>
         <p>With immense joy and enthusiasm, we welcome you to the <strong>Rishi Pranaya 2nd Durga Puja Cultural Program 2026</strong>. Durga Puja is not just a festival—it is a celebration of devotion, togetherness, culture, and the spirit of our community. As we gather to seek the blessings of Goddess Durga, we also come together to showcase the incredible talent, creativity, and unity of our residents.</p>
-        <p>This year's cultural program promises an exciting blend of traditional and modern performances, including dance, music, Dance-Drama, recitations, and special performances by our children and adults. Every performance reflects our shared heritage, passion, and the joy of celebrating together as one family.</p>
+        <p>This year's cultural program promises an exciting blend of traditional and modern performances, including dance, music, drama, recitations, and special performances by our children and adults. Every performance reflects our shared heritage, passion, and the joy of celebrating together as one family.</p>
         <p>The event is a wonderful opportunity to encourage young talents, strengthen friendships, and create memories that will last a lifetime. We invite everyone to participate wholeheartedly, cheer for every performer, and make this celebration a grand success.</p>
         <p>Let us celebrate the triumph of good over evil, embrace the festive spirit, and make the <strong>2nd Rishi Pranaya Durga Puja</strong> a memorable milestone in our community's journey.</p>
         <p class="about-closing"><strong>"Shubho Durga Puja! May Maa Durga bless every home with peace, prosperity, happiness, and good health."</strong></p>
@@ -455,7 +455,7 @@ const SEED_ROWS = [
   {n:"Poonam Ghosh",          age:"Adult", cat:"Dance",    solo:"Solo",  song:"Aigiri Nandini",                                   dur:"5 min",   day:"Sashti"},
   {n:"Kids (below 6 years) group dance", age:"Child", cat:"Dance", solo:"Group", song:"Aye re chute aye pujor gandho esheche",    dur:"3 min",   day:"Sashti"},
   {n:"Poonam and Madhurima Duet",  age:"Adult", cat:"Dance",       solo:"Group", song:"Sajani sajani radhika lo",                 dur:"5 min",   day:"Sashti"},
-  {n:"Poonam and Intermediate kids group - Dance-Drama", age:"Child", cat:"Dance-Drama", solo:"Group", song:"SUKUMAR ROY'S Abak Jolpan",     dur:"15 min",  day:"Sashti"},
+  {n:"Poonam and Intermediate kids group - Drama", age:"Child", cat:"Drama", solo:"Group", song:"SUKUMAR ROY'S Abak Jolpan",     dur:"15 min",  day:"Sashti"},
   {n:"Opening chorus song (Kajorree, Maitrayee, Eshani, Debolina, Dipshikha, rest TBD)", age:"Adult", cat:"Song", solo:"Group", song:"TBD", dur:"5 min", day:"Sashti"},
   {n:"Opening classical dance item - Madhurima", age:"Adult", cat:"Dance", solo:"Solo",  song:"Kirwani Pallavi",                 dur:"15 min",  day:"Saptami 1"},
   {n:"Maitrayee",             age:"Adult", cat:"Song",    solo:"Solo",  song:"TBD",                                              dur:"5 min",   day:"Saptami 1"},
@@ -504,7 +504,7 @@ function catBadge(cat) {
   const c = (cat||"").toLowerCase().trim();
   if (c.includes("dance")||c.includes("nritya")) return {cls:"badge-dance",  label:"Dance"};
   if (c.includes("song")||c.includes("chorus")||c.includes("sangeet")||c.includes("gaan")) return {cls:"badge-song", label:"Song"};
-  if (c.includes("Dance-Drama")||c.includes("skit"))   return {cls:"badge-Dance-Drama",  label:"Dance-Drama"};
+  if (c.includes("drama")||c.includes("skit"))   return {cls:"badge-drama",  label:"Drama"};
   if (c.includes("band")||c.includes("instrument")) return {cls:"badge-band", label:"Band"};
   if (c.includes("recit")||c.includes("poem"))   return {cls:"badge-recit",  label:"Recitation"};
   return {cls:"badge-other", label:cat||"Other"};
@@ -538,7 +538,7 @@ function parseNames(str) {
     const names = parts.filter(x=>!/tbd|appx|approx|rest|below|years|above/i.test(x));
     if (names.length>0) return names;
   }
-  if (str.includes(",")&&!/ (and|group|dance|song|Dance-Drama|bollywood|classical|opening|chorus|senior|intermediate|kids) /i.test(str))
+  if (str.includes(",")&&!/ (and|group|dance|song|drama|bollywood|classical|opening|chorus|senior|intermediate|kids) /i.test(str))
     return str.split(",").map(x=>x.trim()).filter(x=>x.length>1);
   return [str.trim()].filter(x=>x.length>0);
 }
@@ -620,7 +620,7 @@ function renderOverview() {
     catMins[label]=(catMins[label]||0)+parseMins(row.dur);
   });
   const totalMins = Object.values(catMins).reduce((a,b)=>a+b,0)||1;
-  const icons = { Dance:"💃", Song:"🎵", Dance-Drama:"🎭", Band:"🎸", Recitation:"📜", Other:"✨" };
+  const icons = { Dance:"💃", Song:"🎵", Drama:"🎭", Band:"🎸", Recitation:"📜", Other:"✨" };
   document.getElementById("overview-breakdown").innerHTML =
     `<div class="breakdown-grid">` +
     Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,n]) => {
