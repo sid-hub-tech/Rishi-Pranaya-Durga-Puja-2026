@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Rishi Pranaya · Durga Puja Cultural Group 2026</title>
+  <title>Rishi Pranaya · Durga Puja Cultural Committee 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@500;600&display=swap" rel="stylesheet">
   <style>
@@ -233,7 +233,7 @@
 <!-- ══ HEADER ══════════════════════════════════════════════ -->
 <div class="puja-header">
   <div class="bn">শুভ শারদীয়া</div>
-  <h1>Rishi Pranaya &middot; Durga Puja Cultural Group</h1>
+  <h1>Rishi Pranaya &middot; Durga Puja Cultural Programme</h1>
   <div class="hdr-sub">2nd Year &middot; Durga Puja 2026 &middot; Cultural Programme Register</div>
 
   <!-- Event countdown -->
@@ -296,7 +296,7 @@
         <div class="stat-hint">View →</div>
       </div>
       <div class="stat-box clickable" onclick="showTab('participants',document.getElementById('btn-participants'))">
-        <div class="stat-icon">🎤</div>
+        <div class="stat-icon">🧑‍🎨</div>
         <div class="stat-val" id="s-adults">—</div>
         <div class="stat-lbl">Adults</div>
         <div class="stat-hint">View →</div>
@@ -305,8 +305,8 @@
 
     <!-- Day-wise summary -->
     <div class="card">
-      <div class="card-eyebrow">Night Summary</div>
-      <h2>Programme by Evening</h2>
+      <div class="card-eyebrow">Event Summary</div>
+      <h2>Programme details</h2>
       <div class="day-summary-grid" id="day-summary-grid">
         <div class="loading"> </div>
       </div>
@@ -351,9 +351,18 @@
       <div class="card-eyebrow">Share the Programme</div>
       <h2>Scan &amp; Share</h2>
       <div class="qr-panel">
-        <canvas id="qr-canvas" style="image-rendering:pixelated;image-rendering:crisp-edges;max-width:220px;width:auto;"></canvas>
+        <img
+          src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&ecc=M&data=https%3A%2F%2Fsid-hub-tech.github.io%2FRishi-Pranaya-Durga-Puja-2026%2F"
+          alt="QR Code — Rishi Pranaya Durga Puja 2026"
+          width="220" height="220"
+          style="border-radius:8px;border:4px solid #E8DDD0;display:block;flex-shrink:0;"
+          id="qr-img-static"
+          onerror="this.style.display='none';document.getElementById('qr-canvas').style.display='block';if(window.drawQR)drawQR();"
+        />
+        <canvas id="qr-canvas" style="border-radius:8px;border:4px solid #E8DDD0;display:none;flex-shrink:0;"></canvas>
         <div class="qr-info">
-          <p>Scan the QR code to open this live programme register on any phone. Share it with residents so everyone can follow along during the event.</p>
+          <p>Scan this QR code to open the live programme register on any phone. Share it with all residents so everyone can follow along during the event.</p>
+          <p style="font-size:11px;color:var(--ink-3);margin-top:8px;word-break:break-all;"><b>URL:</b> rishi-pranaya.durga-puja2026</p>
           <button class="share-btn" style="margin-top:12px;border-radius:8px;padding:8px 18px;font-size:13px;" onclick="shareWhatsApp()">📲 Share via WhatsApp</button>
         </div>
       </div>
@@ -427,7 +436,7 @@
 </div>
 
 <footer>
-  <div class="footer-logo">Rishi Pranaya Cultural Group</div>
+  <div class="footer-logo">Rishi Pranaya Cultural Committee</div>
   Durga Puja 2026 &middot; Programme Register &middot; Live from Google Sheets
 </footer>
 
@@ -439,7 +448,7 @@ const SHEET_ID  = "1_sC0drvp_zZyEQtH0vPpglyaqxmocRsNj_kqXFWXqMw";
 const SHEET_TAB = "Cultural+events+list";
 // Sashti 2026: 16 Oct 2026 18:00 IST = UTC+5:30
 const EVENT_DATE = new Date("2026-10-16T18:00:00+05:30");
-const PAGE_URL   = window.location.href;
+const PAGE_URL   = "https://sid-hub-tech.github.io/Rishi-Pranaya-Durga-Puja-2026/";
 
 const SEED_ROWS = [
   {n:"Poonam Ghosh",          age:"Adult", cat:"Dance",    solo:"Solo",  song:"Aigiri Nandini",                                   dur:"5 min",   day:"Sashti"},
@@ -625,8 +634,7 @@ function renderOverview() {
       </div>`;
     }).join("") + `</div>`;
 
-  // QR code
-  drawQR();
+  // QR is now a static <img> — no JS needed
 }
 
 /* ═══════════════════════════════════════════════════════════
