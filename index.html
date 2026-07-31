@@ -179,7 +179,7 @@
 
   /* ── LOADING / EMPTY ── */
   .loading { text-align:center; padding:48px 20px; color:var(--ink-3); font-size:13px; }
-  .loading::before { content:"🪔"; display:block; font-size:28px; margin-bottom:10px; animation:pulse 1.4s ease-in-out infinite; }
+  .loading::before { content:"🪷🪷"; display:block; font-size:28px; margin-bottom:10px; animation:pulse 1.4s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
   .err-msg { background:#fff4f4; border:1px solid #fcc; border-radius:var(--radius-sm); padding:16px; color:var(--sindoor); font-size:13px; margin:10px 0; }
   .empty { text-align:center; padding:48px 20px; color:var(--ink-3); font-size:13px; }
@@ -851,9 +851,9 @@ function updateEventCountdown() {
   if (!el) return;
   const now  = new Date();
   const diff = EVENT_DATE - now;
-  if (diff<=0) { el.textContent="Event is underway! 🪔"; return; }
+  if (diff<=0) { el.textContent="Event is underway! 🪷🪷"; return; }
   const d = Math.floor(diff/86400000);
-  el.textContent = d > 0 ? `${d} day${d===1?'':'s'} to go` : "Tomorrow! 🪔";
+  el.textContent = d > 0 ? `${d} day${d===1?'':'s'} to go` : "Tomorrow! 🪷🪷";
 }
 setInterval(updateEventCountdown, 60000); // only days shown, update every minute
 updateEventCountdown();
@@ -862,7 +862,7 @@ updateEventCountdown();
    WHATSAPP SHARE
 ═══════════════════════════════════════════════════════════ */
 function shareWhatsApp() {
-  const msg = encodeURIComponent("🪔 *Rishi Pranaya Durga Puja 2026 — Cultural Programme*\n\nView the live programme register here:\n" + PAGE_URL + "\n\nShubho Sarodiya! 🙏");
+  const msg = encodeURIComponent("🪷🪷 *Rishi Pranaya Durga Puja 2026 — Cultural Programme*\n\nView the live programme register here:\n" + PAGE_URL + "\n\nShubho Sarodiya! 🙏");
   window.open("https://wa.me/?text="+msg,"_blank");
 }
 
