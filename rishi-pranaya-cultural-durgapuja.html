@@ -80,7 +80,7 @@
   .card h2 { font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--ink); margin-bottom:16px; line-height:1.3; }
 
   /* ── DAY SUMMARY GRID ── */
-  .day-summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .day-summary-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
   .day-summary-item { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 12px; text-align:center; position:relative; overflow:hidden; }
   .day-summary-item::before { content:""; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--sindoor),var(--marigold-lt)); }
   .day-summary-date { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--sindoor); margin-bottom:6px; }
@@ -137,6 +137,7 @@
   .badge-dance  { background:#FEF0E6; color:#B54708; border:1px solid #FDDCAB; }
   .badge-song   { background:#FEE8E8; color:var(--sindoor); border:1px solid #FCCFCF; }
   .badge-drama  { background:#EEE8FF; color:#5B21B6; border:1px solid #D8CFFF; }
+  .badge-instrument { background:#E5F7F4; color:#116466; border:1px solid #B5E5DC; }
   .badge-band   { background:#E8F1FF; color:#1D4ED8; border:1px solid #BFCFFF; }
   .badge-recit  { background:#FEF9C3; color:#854D0E; border:1px solid #FDE68A; }
   .badge-other  { background:#F3EDE4; color:var(--ink-3); border:1px solid var(--border); }
@@ -246,6 +247,7 @@
     <span class="hdr-date-pill">🗓 Sashti · 16 Oct (Fri)</span>
     <span class="hdr-date-pill">🗓 Saptami 1 · 17 Oct (Sat)</span>
     <span class="hdr-date-pill">🗓 Saptami 2 · 18 Oct (Sun)</span>
+    <span class="hdr-date-pill">🗓 Nabami · 20 Oct (Tue)</span>
   </div>
 </div>
 
@@ -261,13 +263,8 @@
 
 <!-- ══ REFRESH BAR ══════════════════════════════════════ -->
 <div class="refresh-bar" id="global-refresh-bar">
-  <button class="refresh-btn" onclick="manualRefresh()">↻ Refresh</button>
   <button class="share-btn"   onclick="shareWhatsApp()">📲 Share</button>
   <button class="print-btn"   onclick="window.print()">🖨 Print / PDF</button>
-  <div class="refresh-info">
-    <span id="ts-global">⏳ Loading…</span>
-    <span id="refresh-countdown">↻ 60s</span>
-  </div>
 </div>
 
 <main>
@@ -428,47 +425,25 @@
 
 <footer>
   <div class="footer-logo">Rishi Pranaya Cultural Group</div>
-  Durga Puja 2026 &middot; Programme Register &middot; Live from Google Sheets
+  Durga Puja 2026 &middot; Programme Register &middot; Cultural Programme
 </footer>
 
 <script>
 /* ═══════════════════════════════════════════════════════════
    CONFIG
 ═══════════════════════════════════════════════════════════ */
-const SHEET_ID  = "1_sC0drvp_zZyEQtH0vPpglyaqxmocRsNj_kqXFWXqMw";
-const SHEET_TAB = "Cultural+events+list";
+// All programme data is embedded below
+// Offline edition: no Google Sheets requests
 // Sashti 2026: 16 Oct 2026 18:00 IST = UTC+5:30
 const EVENT_DATE = new Date("2026-10-16T18:00:00+05:30");
 const PAGE_URL   = window.location.href;
 
-const SEED_ROWS = [
-  {n:"Poonam Ghosh",          age:"Adult", cat:"Dance",    solo:"Solo",  song:"Aigiri Nandini",                                   dur:"5 min",   day:"Sashti"},
-  {n:"Kids (below 6 years) group dance", age:"Child", cat:"Dance", solo:"Group", song:"Aye re chute aye pujor gandho esheche",    dur:"3 min",   day:"Sashti"},
-  {n:"Poonam and Madhurima Duet",  age:"Adult", cat:"Dance",       solo:"Group", song:"Sajani sajani radhika lo",                 dur:"5 min",   day:"Sashti"},
-  {n:"Poonam and Intermediate kids group - Drama", age:"Child", cat:"Drama", solo:"Group", song:"SUKUMAR ROY'S Abak Jolpan",     dur:"15 min",  day:"Sashti"},
-  {n:"Opening chorus song (Kajorree, Maitrayee, Eshani, Debolina, Dipshikha, rest TBD)", age:"Adult", cat:"Song", solo:"Group", song:"TBD", dur:"5 min", day:"Sashti"},
-  {n:"Opening classical dance item - Madhurima", age:"Adult", cat:"Dance", solo:"Solo",  song:"Kirwani Pallavi",                 dur:"15 min",  day:"Saptami 1"},
-  {n:"Maitrayee",             age:"Adult", cat:"Song",    solo:"Solo",  song:"TBD",                                              dur:"5 min",   day:"Saptami 1"},
-  {n:"Chorus song (Kajorree, Maitrayee, Eshani, Debolina, Dipshikha, rest TBD)", age:"Adult", cat:"Song", solo:"Group", song:"TBD", dur:"5 min", day:"Saptami 1"},
-  {n:"Samriddhi",             age:"Child", cat:"Dance",   solo:"Solo",  song:"TBD",                                              dur:"5 min",   day:"Saptami 1"},
-  {n:"Group dance bollywood (Madhurima, Kajorree, Eshani, Maitrayee, Sweety)", age:"Adult", cat:"Dance", solo:"Group", song:"Taal se taal mila · Dheem tana · Apsara Ali mashup", dur:"6 min", day:"Saptami 2"},
-  {n:"Group dance bollywood (Poonam, Haripriya, Komal, Smitashree)", age:"Adult", cat:"Dance", solo:"Group", song:"TBD",         dur:"7 min",   day:"Saptami 2"},
-  {n:"Chorus song (Kajorree, Maitrayee, Eshani, Debolina, Dipshikha)", age:"Adult", cat:"Song", solo:"Group", song:"TBD",        dur:"5 min",   day:"Saptami 2"},
-  {n:"Samriddhi",             age:"Child", cat:"Recitation", solo:"Solo", song:"TBD",                                            dur:"3 min",   day:"Saptami 2"},
-  {n:"Siddhartha (Arjo) and group", age:"Child", cat:"Band", solo:"Group", song:"TBD",                                          dur:"60 min",  day:"Saptami 2"},
-  {n:"Susmita, Sayani, Bratati, Papai and group", age:"Adult", cat:"Dance (Nritya Natika)", solo:"Group", song:"Rabindra Sangeet", dur:"60 min", day:"Saptami 1"},
-  {n:"Sayani and group opening dance", age:"Adult", cat:"Dance", solo:"Group", song:"Bajlo tomar Alor benu",                     dur:"6 min",   day:"Sashti"},
-  {n:"Mouli Nandi",           age:"Adult", cat:"Dance",   solo:"Duet",  song:"Gahana Kusumo",                                    dur:"7 min",   day:"Sashti"},
-  {n:"Mili, Mithi, Ivanshi",  age:"Child", cat:"Dance",   solo:"Group", song:"Ailo uma barite",                                  dur:"3 min",   day:"Saptami 1"},
-  {n:"Ivanshi",               age:"Child", cat:"Dance",   solo:"Solo",  song:"Nagendra",                                         dur:"4 min",   day:"Sashti"},
-  {n:"Deveshi Ray",           age:"Child", cat:"Song",    solo:"Solo",  song:"TBD",                                              dur:"3 min",   day:"Saptami 1"},
-  {n:"Aadrika",               age:"Child", cat:"Dance",   solo:"Solo",  song:"TBD",                                              dur:"5 min",   day:"Saptami 1"},
-  {n:"Aradhya Rai",           age:"Child", cat:"Dance",   solo:"Solo",  song:"TBD",                                              dur:"7 min",   day:"Saptami 1"},
-  {n:"Senior kids group dance (Aradhya, Aheli, Devishi, Adrika, rest TBD)", age:"Child", cat:"Dance", solo:"Group", song:"TBD", dur:"6 min",   day:"Saptami 2"},
-];
+const SEED_ROWS = [{"n": "Maitrayee, Kajorree, Payel, Poushali, Soma, Mithu, Harapriya, Eshani, Debolina, Dipshikha, Tapati, Ruby, Lovely, Sangita, Sanchita, Shubhra, Kakali, Pranab, Saptamita", "description": "Opening chorus song", "age": "Adults", "cat": "Song", "solo": "Group", "song": "Ya chandi, Sankha Subhra Robe, Bajlo tomar Alor benu, Jaya Jaya Jaype (Skit form)", "dur": "20 mins", "day": "Sashti"}, {"n": "Rishaan, Sharanya, Saanvi, Kiara, Riyanshi, Pratyusha, Kaashvi, Srinjoyee,Darsh, Shaurya, Riyaan,  Reyansh, Aashvik, Advika, Krish", "description": "Junior kids group dance", "age": "Kids", "cat": "Dance", "solo": "Group", "song": "Aye re chute aye pujor gandho esheche", "dur": "3 mins", "day": "Sashti"}, {"n": "Anuranan Pal", "description": "Poem", "age": "Kids", "cat": "Recitation", "solo": "Solo", "song": "Sharat - Rabindranath Thakur", "dur": "3 mins", "day": "Sashti"}, {"n": "Ivanshi", "description": "Dance", "age": "Kids", "cat": "Dance", "solo": "Solo", "song": "Nagendra", "dur": "8 mins", "day": "Sashti"}, {"n": "Sai", "description": "Keyboard", "age": "Kids", "cat": "Instrument", "solo": "Solo", "song": "Dhaker tale", "dur": "7 mins", "day": "Sashti"}, {"n": "Poonam, Riya, Ananya, Tanishi, Aarvi, Samriddhi, Devishi, Ivanshi, Adya, Aadrika, Ibrah, Agnibesh, Jewel", "description": "Nobo Rupey Durga (Mahishasur Mardini)", "age": "Adults and Kids", "cat": "Dance drama", "solo": "Group", "song": "Aigiri Nandini, Bodhon Dhwani, Birendra Krishna Bhadra's Voice", "dur": "15 mins", "day": "Sashti"}, {"n": "Samriddha Dutta", "description": "Poem", "age": "Kids", "cat": "Recitation", "solo": "Solo", "song": "Sukumar Rai's Abol Tabol", "dur": "2 mins", "day": "Sashti"}, {"n": "Aarvi, Tanishi, Ananya, Adya", "description": "Group dance", "age": "Kids", "cat": "Dance", "solo": "Group", "song": "Aagomoni", "dur": "4 mins", "day": "Sashti"}, {"n": "Aaradhya, Madhurima", "description": "Duet dance", "age": "Kid and Adult", "cat": "Dance", "solo": "Group", "song": "Bho Shambho", "dur": "5 mins", "day": "Sashti"}, {"n": "Mouli Das", "description": "Song", "age": "Adult", "cat": "Song", "solo": "Solo", "song": "O CHAND SAMLE RAKHO JOCHONAKE", "dur": "5 mins", "day": "Sashti"}, {"n": "Susmita, Bratati, Sayani, Mouli", "description": "Group dance", "age": "Adults", "cat": "Dance", "solo": "Group", "song": "Bahu manaratha, Gahana Kusuma, Piya tose laaga jo ye man (Skit form)", "dur": "15 mins", "day": "Sashti"}, {"n": "Jewel, Agnibesh, Sai, Rijo, Sarvang, Aarav, Mounip", "description": "Drama", "age": "Kids", "cat": "Drama", "solo": "Group", "song": "Obak Jolpan by Sukumar Ray", "dur": "10 mins", "day": "Sashti"}, {"n": "Aaradhya", "description": "Dance", "age": "Kids", "cat": "Dance", "solo": "Solo", "song": "Om Ayurdevi", "dur": "3 mins", "day": "Sashti"}, {"n": "Mounip, Manab", "description": "Sitar & Tabla", "age": "Kid and Adult", "cat": "Instrument", "solo": "Group", "song": "", "dur": "10 mins", "day": "Sashti"}, {"n": "Bharati Bandhopadhyay", "description": "Recitation", "age": "Adult", "cat": "Recitation", "solo": "Solo", "song": "Kanyashlok", "dur": "5 mins", "day": "Sashti"}, {"n": "Sharmistha, Poonam, Madhurima", "description": "Odissi, Bharatnatyam & Kathak fusion", "age": "Adults", "cat": "Dance", "solo": "Group", "song": "Sajani Sajani Radhika Lo", "dur": "5 mins", "day": "Sashti"}, {"n": "Abhiraj", "description": "Guitar", "age": "Kid", "cat": "Instrument", "solo": "Solo", "song": "Aha ki anando", "dur": "5 mins", "day": "Sashti"}, {"n": "Poonam", "description": "Dance with recitation (Riya)", "age": "Adult", "cat": "Dance drama", "solo": "Solo", "song": "Nari", "dur": "5 mins", "day": "Sashti"}, {"n": "Riya", "description": "Recitation", "age": "Adult", "cat": "Recitation", "solo": "Solo", "song": "", "dur": "5 mins", "day": "Sashti"}, {"n": "Madhurima", "description": "Odissi classical dance item", "age": "Adult", "cat": "Dance", "solo": "Solo", "song": "Patadeep Pallavi", "dur": "5 mins", "day": "Saptami 1"}, {"n": "Basab Bijay Sarkar", "description": "Song", "age": "Adult", "cat": "Song", "solo": "Solo", "song": "Chirodini Tumi Je Amar & Tumi Achho Ato Kache Tai", "dur": "10 mins", "day": "Saptami 1"}, {"n": "Aadrika", "description": "Dance", "age": "Kid", "cat": "Dance", "solo": "Solo", "song": "Durge durge durgatinashini, Om Ayurdevi", "dur": "10 mins", "day": "Saptami 1"}, {"n": "Deveshi Ray", "description": "Song", "age": "Kid", "cat": "Song", "solo": "Solo", "song": "Akash jure suninu", "dur": "5 mins", "day": "Saptami 1"}, {"n": "Anita Dey and Team", "description": "Nritya Natika", "age": "Adults and Kids", "cat": "Dance drama", "solo": "Group", "song": "Notir Pujo - Rabindranath Tagore", "dur": "1 hour", "day": "Saptami 1"}, {"n": "Tanmoy", "description": "Mohon Bina", "age": "Adult", "cat": "Instrument", "solo": "Solo", "song": "Classical piece", "dur": "30 mins", "day": "Saptami 1"}, {"n": "Maitrayee", "description": "Song", "age": "Adult", "cat": "Song", "solo": "Solo", "song": "Roj roj dali dali", "dur": "5 mins", "day": "Saptami 1"}, {"n": "Siddhartha, Samriddho, Sannidhyo, Souhardya, Gourav", "description": "Band", "age": "Kids", "cat": "Band", "solo": "Group", "song": "", "dur": "1 hour", "day": "Saptami 1"}, {"n": "Aadrika, Devishi, Aaradhya, Aaheli", "description": "Opening group dance", "age": "Kids", "cat": "Dance", "solo": "Group", "song": "Barso re, Kanha so ja zara", "dur": "5 mins", "day": "Saptami 2"}, {"n": "Samriddhi", "description": "Poem", "age": "Kid", "cat": "Recitation", "solo": "Solo", "song": "Katukutu buro - Sukumar Ray", "dur": "5 mins", "day": "Saptami 2"}, {"n": "Saanvi", "description": "Dance", "age": "Kid", "cat": "Dance", "solo": "Solo", "song": "Piu bole piya bole", "dur": "2 mins", "day": "Saptami 2"}, {"n": "Sai", "description": "Keyboard", "age": "Kid", "cat": "Instrument", "solo": "Solo", "song": "Mere rang me rang ne wali", "dur": "5 mins", "day": "Saptami 2"}, {"n": "Sai, Abhiraj", "description": "Keyboard and Guitar", "age": "Kids", "cat": "Instrument", "solo": "Group", "song": "Ay mere humsafar", "dur": "5 mins", "day": "Saptami 2"}, {"n": "Madhurima, Payel, Kajorree, Eshani, Dipshikha, Suiti, Maitrayee", "description": "Group dance", "age": "Adults", "cat": "Dance", "solo": "Group", "song": "Taal se taal, Dheem ta da re, Apsara ali, Rangeelo maro dholna", "dur": "6 mins", "day": "Saptami 2"}, {"n": "Prabal", "description": "Song", "age": "Adult", "cat": "Song", "solo": "Solo", "song": "Aaj aei din take", "dur": "5 mins", "day": "Saptami 2"}, {"n": "Samriddha Dutta", "description": "Dance", "age": "Kid", "cat": "Dance", "solo": "Solo", "song": "Ananda Shankar Dance music", "dur": "5 mins", "day": "Saptami 2"}, {"n": "Shubhra", "description": "Song", "age": "Adult", "cat": "Song", "solo": "Solo", "song": "Rahe Na Rahe Hum", "dur": "7 mins", "day": "Saptami 2"}, {"n": "Aarvi, Ananya, Tanishi, Adya", "description": "Group dance", "age": "Kids", "cat": "Dance", "solo": "Group", "song": "Piya piya, Chunri Chunri", "dur": "4 mins", "day": "Saptami 2"}, {"n": "Ashis Kumar Saha", "description": "Recitation", "age": "Adult", "cat": "Recitation", "solo": "Solo", "song": "", "dur": "5 mins", "day": "Saptami 2"}, {"n": "Riya (Pari) Goel", "description": "Dance", "age": "Kid", "cat": "Dance", "solo": "Solo", "song": "Aye Tobe Sohochori", "dur": "5 mins", "day": "Saptami 2"}, {"n": "Agnibesh", "description": "Poem", "age": "Kid", "cat": "Recitation", "solo": "Solo", "song": "Ganesh bole Dugga Maa k", "dur": "3 mins", "day": "Saptami 2"}, {"n": "Sanchari Guha", "description": "Song", "age": "Adult", "cat": "Song", "solo": "Solo", "song": "", "dur": "10 mins", "day": "Saptami 2"}, {"n": "Poonam, Harapriya, Smitashree, Sharmistha, Lovely, KanakChapa", "description": "Dance Drama (Concept - Puja Sobar)", "age": "Adults", "cat": "Dance drama", "solo": "Group", "song": "Mix Folk Songs(Bihu, Rangabati, Bhumroh, Tu Laung Mai Lachi, Inkem Inkem, Pinga Pinga, Jago Jago Uma", "dur": "20 mins", "day": "Saptami 2"}, {"n": "Anirban Dasgupta", "description": "Song", "age": "Adult", "cat": "Song", "solo": "Solo", "song": "Ek Ajnabi Hasina Se , Humein tumse pyar kitna", "dur": "10 mins", "day": "Saptami 2"}, {"n": "Gautam Roy, Subhang Roy", "description": "Duet dance", "age": "Adult", "cat": "Dance", "solo": "Group", "song": "Mere umar k naujawano, badtameez dil, bachna aye hasino", "dur": "5 mins", "day": "Saptami 2"}, {"n": "Ayan Roy", "description": "Song", "age": "Adult", "cat": "Song", "solo": "Solo", "song": "", "dur": "10 mins", "day": "Saptami 2"}, {"n": "Son of Ronita Dutta", "description": "Flute", "age": "Kid", "cat": "Instrument", "solo": "Solo", "song": "", "dur": "5 mins", "day": "Saptami 2"}, {"n": "Ronita Dutta", "description": "Dance", "age": "Adult", "cat": "Dance", "solo": "Solo", "song": "", "dur": "7 mins", "day": "Saptami 2"}, {"n": "Susmita, Mouli, Sayani, Simran, Priyanka, Nibha, Priya, Poushali, Moumita, Aaradhya, Aaheli, Lovely", "description": "Garba group dance", "age": "Adults and Kids", "cat": "Garba dance", "solo": "Group", "song": "Garba songs", "dur": "15 mins", "day": "Nabami"}, {"n": "External Guest Artists", "description": "Band", "age": "Adults", "cat": "Band", "solo": "Group", "song": "Popular songs", "dur": "2 hours", "day": "Nabami"}, {"n": "Open to all event", "description": "Dandiya", "age": "Adults and Kids", "cat": "Dandiya", "solo": "Group", "song": "Dandiya songs", "dur": "30 mins", "day": "Nabami"}];
+const PARTICIPANT_ROWS = [{"name": "Maitrayee", "age": "Adult"}, {"name": "Kajorree", "age": "Adult"}, {"name": "Payel", "age": "Adult"}, {"name": "Poushali", "age": "Adult"}, {"name": "Soma", "age": "Adult"}, {"name": "Mithu", "age": "Adult"}, {"name": "Harapriya", "age": "Adult"}, {"name": "Eshani", "age": "Adult"}, {"name": "Debolina", "age": "Adult"}, {"name": "Dipshikha", "age": "Adult"}, {"name": "Tapati", "age": "Adult"}, {"name": "Ruby", "age": "Adult"}, {"name": "Lovely", "age": "Adult"}, {"name": "Sangita", "age": "Adult"}, {"name": "Sanchita", "age": "Adult"}, {"name": "Shubhra", "age": "Adult"}, {"name": "Kakali", "age": "Adult"}, {"name": "Pranab", "age": "Adult"}, {"name": "Saptamita", "age": "Adult"}, {"name": "Rishaan", "age": "Kids"}, {"name": "Sharanya", "age": "Kids"}, {"name": "Saanvi", "age": "Kids"}, {"name": "Kiara", "age": "Kids"}, {"name": "Riyanshi", "age": "Kids"}, {"name": "Pratyusha", "age": "Kids"}, {"name": "Kaashvi", "age": "Kids"}, {"name": "Srinjoyee", "age": "Kids"}, {"name": "Darsh", "age": "Kids"}, {"name": "Shaurya", "age": "Kids"}, {"name": "Riyaan", "age": "Kids"}, {"name": "Reyansh", "age": "Kids"}, {"name": "Aashvik", "age": "Kids"}, {"name": "Advika", "age": "Kids"}, {"name": "Krish", "age": "Kids"}, {"name": "Anuranan Pal", "age": "Kids"}, {"name": "Ivanshi", "age": "Kids"}, {"name": "Sai", "age": "Kids"}, {"name": "Poonam", "age": "Adult"}, {"name": "Riya", "age": "Adult"}, {"name": "Ananya", "age": "Kids"}, {"name": "Tanishi", "age": "Kids"}, {"name": "Aarvi", "age": "Kids"}, {"name": "Samriddhi", "age": "Kids"}, {"name": "Devishi", "age": "Kids"}, {"name": "Adya", "age": "Kids"}, {"name": "Aadrika", "age": "Kids"}, {"name": "Ibrah", "age": "Kids"}, {"name": "Agnibesh", "age": "Kids"}, {"name": "Jewel", "age": "Kids"}, {"name": "Samriddha Dutta", "age": "Kids"}, {"name": "Aaradhya", "age": "Kids"}, {"name": "Madhurima", "age": "Adult"}, {"name": "Mouli Das", "age": "Adult"}, {"name": "Susmita", "age": "Adult"}, {"name": "Bratati", "age": "Adult"}, {"name": "Sayani", "age": "Adult"}, {"name": "Mouli", "age": "Adult"}, {"name": "Rijo", "age": "Kids"}, {"name": "Sarvang", "age": "Kids"}, {"name": "Aarav", "age": "Kids"}, {"name": "Mounip", "age": "Kids"}, {"name": "Manab", "age": "Adult"}, {"name": "Bharati Bandhopadhyay", "age": "Adult"}, {"name": "Sharmistha", "age": "Adult"}, {"name": "Abhiraj", "age": "Kids"}, {"name": "Basab Bijay Sarkar", "age": "Adult"}, {"name": "Deveshi Ray", "age": "Kids"}, {"name": "Anita Dey and Team", "age": "Adult"}, {"name": "Tanmoy", "age": "Adult"}, {"name": "Siddhartha", "age": "Kids"}, {"name": "Samriddho", "age": "Kids"}, {"name": "Sannidhyo", "age": "Kids"}, {"name": "Souhardya", "age": "Kids"}, {"name": "Gourav", "age": "Kids"}, {"name": "Aaheli", "age": "Kids"}, {"name": "Suiti", "age": "Adult"}, {"name": "Prabal", "age": "Adult"}, {"name": "Ashis Kumar Saha", "age": "Adult"}, {"name": "Riya (Pari) Goel", "age": "Kids"}, {"name": "Sanchari Guha", "age": "Adult"}, {"name": "Smitashree", "age": "Adult"}, {"name": "KanakChapa", "age": "Adult"}, {"name": "Anirban Dasgupta", "age": "Adult"}, {"name": "Gautam Roy", "age": "Adult"}, {"name": "Subhang Roy", "age": "Kids"}, {"name": "Ayan Roy", "age": "Adult"}, {"name": "Ronita Dutta", "age": "Adult"}, {"name": "Simran", "age": "Adult"}, {"name": "Priyanka", "age": "Adult"}, {"name": "Nibha", "age": "Adult"}, {"name": "Priya", "age": "Adult"}, {"name": "Moumita", "age": "Adult"}, {"name": "External Guest Artists", "age": "Adult"}];
 
 let DATA       = SEED_ROWS;
 let activeDay  = "All";
+let activeCategory = "All";
 let nowPlaying = null;   // index into DATA of currently playing item
 
 /* ═══════════════════════════════════════════════════════════
@@ -495,7 +470,8 @@ function catBadge(cat) {
   if (c.includes("dance")||c.includes("nritya")) return {cls:"badge-dance",  label:"Dance"};
   if (c.includes("song")||c.includes("chorus")||c.includes("sangeet")||c.includes("gaan")) return {cls:"badge-song", label:"Song"};
   if (c.includes("drama")||c.includes("skit"))   return {cls:"badge-drama",  label:"Drama"};
-  if (c.includes("band")||c.includes("instrument")) return {cls:"badge-band", label:"Band"};
+  if (c.includes("instrument")) return {cls:"badge-instrument", label:"Instrument"};
+  if (c.includes("band")) return {cls:"badge-band", label:"Band"};
   if (c.includes("recit")||c.includes("poem"))   return {cls:"badge-recit",  label:"Recitation"};
   return {cls:"badge-other", label:cat||"Other"};
 }
@@ -505,6 +481,7 @@ function dayLabel(day) {
   if (d.includes("sashti")||d.includes("sasthi")||d.includes("shashthi")) return "Sashti · 16 Oct";
   if (d.includes("saptami 1")||d.includes("saptami1")) return "Saptami 1 · 17 Oct";
   if (d.includes("saptami 2")||d.includes("saptami2")) return "Saptami 2 · 18 Oct";
+  if (d.includes("nabami")||d.includes("navami")) return "Nabami · 20 Oct";
   return day||"—";
 }
 function normDay(day) {
@@ -512,12 +489,13 @@ function normDay(day) {
   if (d.includes("sashti")||d.includes("sasthi")||d.includes("shashthi")) return "Sashti";
   if (d.includes("saptami 1")||d.includes("saptami1")) return "Saptami 1";
   if (d.includes("saptami 2")||d.includes("saptami2")) return "Saptami 2";
+  if (d.includes("nabami")||d.includes("navami")) return "Nabami";
   return day||"Other";
 }
 function allDays() {
   const days = new Set(DATA.map(r=>normDay(r.day)).filter(Boolean));
-  return ["Sashti","Saptami 1","Saptami 2"].filter(d=>days.has(d))
-         .concat([...days].filter(d=>!["Sashti","Saptami 1","Saptami 2"].includes(d)));
+  return ["Sashti","Saptami 1","Saptami 2","Nabami"].filter(d=>days.has(d))
+         .concat([...days].filter(d=>!["Sashti","Saptami 1","Saptami 2","Nabami"].includes(d)));
 }
 
 function parseNames(str) {
@@ -533,62 +511,42 @@ function parseNames(str) {
   return [str.trim()].filter(x=>x.length>0);
 }
 function buildParticipantIndex() {
-  const map = {};
-  DATA.forEach(row => {
-    parseNames(row.n).forEach(name => {
-      if (!map[name]) map[name] = {events:[], age:row.age, flat:row.flat||""};
-      map[name].events.push(`${catBadge(row.cat).label} · ${normDay(row.day)}`);
-    });
-  });
-  return Object.entries(map).sort((a,b)=>a[0].localeCompare(b[0]));
+  // The workbook's Participant list is the authoritative participant source.
+  // Do not infer names or classifications from programme descriptions.
+  return PARTICIPANT_ROWS.map(p => [p.name, {age:p.age, flat:"", events:[]}])
+    .sort((a,b) => a[0].localeCompare(b[0]));
 }
 
 /* ═══════════════════════════════════════════════════════════
    FETCH
 ═══════════════════════════════════════════════════════════ */
 function loadData() {
-  setTimestamps("Refreshing…");
-  const old = document.getElementById("gviz-script");
-  if (old) old.remove();
-  window._gvizCallback = function(json) {
-    try {
-      if (json.status==="error") throw new Error((json.errors&&json.errors[0]&&json.errors[0].detailed_message)||"Sheet error");
-      const cell = (row,i) => (row.c[i]&&row.c[i].v!=null) ? String(row.c[i].v).trim() : "";
-      const mapped = (json.table.rows||[])
-        .filter(row => { const name=cell(row,1); return name&&!name.toUpperCase().includes("NAME OF THE PARTICIPANT"); })
-        .map(row => ({
-          n:    cell(row,1), age: cell(row,2), cat: cell(row,3),
-          solo: cell(row,4), song:cell(row,5), dur: cell(row,6), day:cell(row,7),
-          flat: cell(row,8),  // optional flat number if sheet has col H
-        }));
-      if (mapped.length>0) { DATA=mapped; setTimestamps("✅ Updated " + new Date().toLocaleTimeString()); }
-      else setTimestamps("⚠ No rows — showing seed data");
-    } catch(e) { setTimestamps("⚠ " + e.message); }
-    renderAll();
-  };
-  const script = document.createElement("script");
-  script.id = "gviz-script";
-  script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json;responseHandler:_gvizCallback&headers=0&sheet=${SHEET_TAB}`;
-  script.onerror = ()=>{ setTimestamps("⚠ Offline — showing seed data"); renderAll(); };
-  document.head.appendChild(script);
+  DATA = SEED_ROWS;
+  renderAll();
 }
 function setTimestamps(msg) { var el=document.getElementById("ts-global"); if(el) el.textContent=msg; }
 
 /* ═══════════════════════════════════════════════════════════
    OVERVIEW
 ═══════════════════════════════════════════════════════════ */
+function ageGroup(age) {
+  const a = String(age || "").toLowerCase();
+  const kid = /\b(kid|kids|child|children)\b/.test(a);
+  return kid ? "Kids" : "Adult";
+}
+
 function renderOverview() {
   // KPI stats
   const allNames = new Set();
   DATA.forEach(row=>parseNames(row.n).forEach(n=>allNames.add(n)));
   document.getElementById("s-items").textContent        = DATA.length;
-  document.getElementById("s-participants").textContent = allNames.size;
-  document.getElementById("s-kids").textContent         = DATA.filter(r=>(r.age||"").toLowerCase().includes("child")).length;
-  document.getElementById("s-adults").textContent       = DATA.filter(r=>!(r.age||"").toLowerCase().includes("child")).length;
+  document.getElementById("s-participants").textContent = PARTICIPANT_ROWS.length;
+  document.getElementById("s-kids").textContent         = DATA.filter(r=>ageGroup(r.age)==="Kids").length;
+  document.getElementById("s-adults").textContent       = DATA.filter(r=>ageGroup(r.age)==="Adult").length;
 
   // Day summary
-  const dayOrder = ["Sashti","Saptami 1","Saptami 2"];
-  const dayMeta  = { Sashti:{date:"16 Oct",day:"Friday"}, "Saptami 1":{date:"17 Oct",day:"Saturday"}, "Saptami 2":{date:"18 Oct",day:"Sunday"} };
+  const dayOrder = ["Sashti","Saptami 1","Saptami 2","Nabami"];
+  const dayMeta  = { Sashti:{date:"16 Oct",day:"Friday"}, "Saptami 1":{date:"17 Oct",day:"Saturday"}, "Saptami 2":{date:"18 Oct",day:"Sunday"}, "Nabami":{date:"20 Oct",day:"Tuesday"} };
   document.getElementById("day-summary-grid").innerHTML = dayOrder.map(d => {
     const rows = DATA.filter(r=>normDay(r.day)===d);
     const totalMins = rows.reduce((s,r)=>s+parseMins(r.dur),0);
@@ -610,7 +568,7 @@ function renderOverview() {
     catMins[label]=(catMins[label]||0)+parseMins(row.dur);
   });
   const totalMins = Object.values(catMins).reduce((a,b)=>a+b,0)||1;
-  const icons = { Dance:"💃", Song:"🎵", Drama:"🎭", Band:"🎸", Recitation:"📜", Other:"✨" };
+  const icons = { Dance:"💃", Song:"🎵", Drama:"🎭", Band:"🎸", Instrument:"🎹", Recitation:"📜", Other:"✨" };
   document.getElementById("overview-breakdown").innerHTML =
     `<div class="breakdown-grid">` +
     Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,n]) => {
@@ -638,7 +596,7 @@ function renderDayTabs() {
   DATA.forEach(r=>{ const d=normDay(r.day); counts[d]=(counts[d]||0)+1; });
   document.getElementById("day-tabs").innerHTML = days.map(d => {
     const cnt = d==="All" ? DATA.length : (counts[d]||0);
-    return `<button class="day-chip ${d===activeDay?"on":""}" onclick="activeDay='${d}';renderProgramme();this.parentElement.querySelectorAll('.day-chip').forEach(b=>b.classList.remove('on'));this.classList.add('on')">${d==="All"?"All Days":dayLabel(d)}<span class="chip-count">${cnt}</span></button>`;
+    return `<button class="day-chip ${d===activeDay?"on":""}" onclick="activeDay='${d}';activeCategory='All';renderProgramme();this.parentElement.querySelectorAll('.day-chip').forEach(b=>b.classList.remove('on'));this.classList.add('on')">${d==="All"?"All Days":dayLabel(d)}<span class="chip-count">${cnt}</span></button>`;
   }).join("");
 }
 
@@ -646,8 +604,9 @@ function renderProgramme() {
   const q = (document.getElementById("prog-search").value||"").toLowerCase();
   const rows = DATA.map((r,i)=>({...r,_i:i})).filter(r=>{
     const dayOk = activeDay==="All"||normDay(r.day)===activeDay;
+    const categoryOk = activeCategory==="All" || catBadge(r.cat).label===activeCategory;
     const qOk   = !q||(r.n||"").toLowerCase().includes(q)||(r.cat||"").toLowerCase().includes(q)||(r.song||"").toLowerCase().includes(q)||(r.day||"").toLowerCase().includes(q);
-    return dayOk&&qOk;
+    return dayOk&&categoryOk&&qOk;
   });
   const el = document.getElementById("programme-container");
   if (!rows.length) { el.innerHTML='<div class="empty">No items match your search.</div>'; return; }
@@ -657,7 +616,7 @@ function renderProgramme() {
     <div class="card"><div class="programme-list">${rows.map(row=>{
       seqNum++;
       const {cls,label}=catBadge(row.cat);
-      const isChild=(row.age||"").toLowerCase().includes("child");
+      const group=ageGroup(row.age);
       const songLine=row.song&&row.song.toLowerCase()!=="tbd" ? `<div class="prog-song">♪ ${row.song}</div>` : "";
       const meta=[row.solo,row.dur].filter(x=>x&&x!=="—").join(" · ");
       const isNP = nowPlaying===row._i;
@@ -670,7 +629,7 @@ function renderProgramme() {
           ${songLine}
           <div class="prog-badges">
             <span class="prog-badge ${cls}">${label}</span>
-            <span class="prog-badge ${isChild?"badge-child":"badge-adult"}">${isChild?"Kids":"Adult"}</span>
+            <span class="prog-badge ${group==="Kids"?"badge-child":"badge-adult"}">${group}</span>
             <span class="prog-badge badge-day">🗓 ${dayLabel(row.day)}</span>
           </div>
         </div>
@@ -695,16 +654,16 @@ function renderParticipants() {
   el.innerHTML =
     `<div class="part-count">${filtered.length} participant${filtered.length!==1?"s":""}</div>
      <div class="all-part-list">${filtered.map(([name,info])=>{
-       const isKid=(info.age||"").toLowerCase().includes("child");
+       const group=ageGroup(info.age);
        const flatBadge=info.flat?`<span class="prog-badge badge-day" style="margin-left:6px;vertical-align:middle;">🏠 ${info.flat}</span>`:"";
        return `<div class="part-row">
          <div class="part-avatar">${initials(name)}</div>
          <div class="part-info">
            <div class="part-name">${name}
-             <span class="prog-badge ${isKid?"badge-child":"badge-adult"}" style="margin-left:6px;vertical-align:middle;">${isKid?"Kids":"Adult"}</span>
+             <span class="prog-badge ${group==="Kids"?"badge-child":"badge-adult"}" style="margin-left:6px;vertical-align:middle;">${group}</span>
              ${flatBadge}
            </div>
-           <div class="part-event">${[...new Set(info.events)].join(" · ")}</div>
+           ${info.events.length ? `<div class="part-event">${[...new Set(info.events)].join(" · ")}</div>` : ""}
          </div>
        </div>`;
      }).join("")}</div>`;
@@ -736,12 +695,14 @@ function showTab(id,btn) {
 function filterByCat(cat) {
   showTab("programme",document.getElementById("btn-programme"));
   activeDay="All";
-  document.getElementById("prog-search").value=cat;
+  activeCategory=cat;
+  document.getElementById("prog-search").value="";
   renderDayTabs(); renderProgramme();
 }
 function filterByDay(day) {
   showTab("programme",document.getElementById("btn-programme"));
   activeDay=day;
+  activeCategory="All";
   document.getElementById("prog-search").value="";
   renderDayTabs(); renderProgramme();
 }
@@ -841,61 +802,37 @@ document.addEventListener('keydown', function(e){
 function updateEventCountdown() {
   const el = document.getElementById("event-countdown");
   if (!el) return;
-  const now  = new Date();
-  const diff = EVENT_DATE - now;
-  if (diff<=0) { el.textContent="Event is underway! 🪔"; return; }
-  const d = Math.floor(diff/86400000);
-  el.textContent = d > 0 ? `${d} day${d===1?'':'s'} to go` : "Tomorrow! 🪔";
+  // Calendar-day countdown in India: changes at midnight IST, not every 24 hours.
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit"
+  }).formatToParts(new Date());
+  const part = type => Number(parts.find(p => p.type === type).value);
+  const todayUTC = Date.UTC(part("year"), part("month") - 1, part("day"));
+  const eventUTC = Date.UTC(2026, 9, 16); // Sashti: 16 October 2026
+  const days = Math.round((eventUTC - todayUTC) / 86400000);
+  if (days > 1) el.textContent = `${days} days to go`;
+  else if (days === 1) el.textContent = "Tomorrow! 🪔";
+  else if (days === 0) el.textContent = "Today! 🪔";
+  else el.textContent = "Shubho Durga Puja! 🪔";
 }
-setInterval(updateEventCountdown, 60000); // only days shown, update every minute
+setInterval(updateEventCountdown, 1000); // picks up the midnight IST change immediately
 updateEventCountdown();
 
 /* ═══════════════════════════════════════════════════════════
    WHATSAPP SHARE
 ═══════════════════════════════════════════════════════════ */
 function shareWhatsApp() {
-  const msg = encodeURIComponent("🪔 *Rishi Pranaya Durga Puja 2026 — Cultural Programme*\n\nView the live programme register here:\n" + PAGE_URL + "\n\nShubho Durga Puja! 🙏");
+  const msg = encodeURIComponent("🪔 *Rishi Pranaya Durga Puja 2026 — Cultural Programme*\n\nView the cultural programme here:\n" + PAGE_URL + "\n\nShubho Durga Puja! 🙏");
   window.open("https://wa.me/?text="+msg,"_blank");
 }
 
 /* ═══════════════════════════════════════════════════════════
-   AUTO-REFRESH COUNTDOWN  (declared here so boot can call it)
+   INITIALIZE EMBEDDED PROGRAMME DATA
 ═══════════════════════════════════════════════════════════ */
-var REFRESH_INTERVAL = 60;
-var secondsLeft = REFRESH_INTERVAL;
-var _refreshTimer = null;
-
-function updateCountdownDisplay() {
-  var el = document.getElementById("refresh-countdown");
-  if (el) el.textContent = "Auto-refresh in " + secondsLeft + "s";
-}
-function tickCountdown() {
-  secondsLeft--;
-  if (secondsLeft <= 0) {
-    secondsLeft = REFRESH_INTERVAL;
-    loadData();
-  }
-  updateCountdownDisplay();
-}
-function manualRefresh() {
-  secondsLeft = REFRESH_INTERVAL;
-  updateCountdownDisplay();
-  loadData();
-}
-
-/* ── Boot: wrapped in DOMContentLoaded so all elements exist ── */
-function boot() {
-  renderAll();
-  loadData();
-  updateCountdownDisplay();
-  if (_refreshTimer) clearInterval(_refreshTimer);
-  _refreshTimer = setInterval(tickCountdown, 1000);
-}
+function boot() { loadData(); }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
-} else {
-  boot(); // DOM already ready (script is at end of body)
-}
+} else { boot(); }
 
 /* ═══════════════════════════════════════════════════════════
    QR CODE — self-contained encoder, zero network required.
