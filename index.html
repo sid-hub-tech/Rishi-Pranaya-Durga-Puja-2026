@@ -541,8 +541,8 @@ function renderOverview() {
   DATA.forEach(row=>parseNames(row.n).forEach(n=>allNames.add(n)));
   document.getElementById("s-items").textContent        = DATA.length;
   document.getElementById("s-participants").textContent = PARTICIPANT_ROWS.length;
-  document.getElementById("s-kids").textContent         = DATA.filter(r=>ageGroup(r.age)==="Kids").length;
-  document.getElementById("s-adults").textContent       = DATA.filter(r=>ageGroup(r.age)==="Adult").length;
+  document.getElementById("s-kids").textContent         = PARTICIPANT_ROWS.filter(p=>ageGroup(p.age)==="Kids").length;
+  document.getElementById("s-adults").textContent       = PARTICIPANT_ROWS.filter(p=>ageGroup(p.age)==="Adult").length;
 
   // Day summary
   const dayOrder = ["Sashti","Saptami 1","Saptami 2","Nabami"];
