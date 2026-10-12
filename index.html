@@ -532,6 +532,8 @@ function setTimestamps(msg) { var el=document.getElementById("ts-global"); if(el
 function ageGroup(age) {
   const a = String(age || "").toLowerCase();
   const kid = /\b(kid|kids|child|children)\b/.test(a);
+  const adult = /\b(adult|adults)\b/.test(a);
+  if (kid && adult) return "Adults and Kids";
   return kid ? "Kids" : "Adult";
 }
 
@@ -629,7 +631,7 @@ function renderProgramme() {
           ${songLine}
           <div class="prog-badges">
             <span class="prog-badge ${cls}">${label}</span>
-            <span class="prog-badge ${group==="Kids"?"badge-child":"badge-adult"}">${group}</span>
+            <span class="prog-badge ${group==="Kids"?"badge-child":group==="Adult"?"badge-adult":"badge-day"}">${group}</span>
             <span class="prog-badge badge-day">🗓 ${dayLabel(row.day)}</span>
           </div>
         </div>
@@ -660,7 +662,7 @@ function renderParticipants() {
          <div class="part-avatar">${initials(name)}</div>
          <div class="part-info">
            <div class="part-name">${name}
-             <span class="prog-badge ${group==="Kids"?"badge-child":"badge-adult"}" style="margin-left:6px;vertical-align:middle;">${group}</span>
+             <span class="prog-badge ${group==="Kids"?"badge-child":group==="Adult"?"badge-adult":"badge-day"}" style="margin-left:6px;vertical-align:middle;">${group}</span>
              ${flatBadge}
            </div>
            ${info.events.length ? `<div class="part-event">${[...new Set(info.events)].join(" · ")}</div>` : ""}
